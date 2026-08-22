@@ -17,6 +17,27 @@
   #app-root { position: relative; width: 100%; height: 100vh; }
   #map { width: 100%; height: 100vh; touch-action: none; }
   #app-root.is-fullscreen, #app-root:fullscreen { width: 100vw; height: 100vh; }
+  #btn-exit-fullscreen {
+    display: none;
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 20;
+    background: rgba(0,0,0,0.72);
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+  #btn-exit-fullscreen:active { background: rgba(0,0,0,0.85); }
+  #app-root.is-fullscreen #btn-exit-fullscreen { display: flex; }
 
   .legend {
     background: white;
@@ -183,6 +204,10 @@
 <body>
 
 <div id="app-root">
+<button type="button" id="btn-exit-fullscreen" title="Exit fullscreen">
+  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+  Exit Fullscreen
+</button>
 <div id="map"></div>
 
 <!-- Top-left: base layer switcher + locate/reset controls -->
@@ -837,6 +862,10 @@
 
   // ---- Fullscreen ----
   let preFullscreenScroll = null;
+  document.getElementById("btn-exit-fullscreen").addEventListener("click", () => {
+    const exit = document.exitFullscreen || document.webkitExitFullscreen;
+    if (exit) exit.call(document);
+  });
   document.getElementById("btn-fullscreen").addEventListener("click", () => {
     const mapEl = document.getElementById("app-root");
     const isFs = document.fullscreenElement || document.webkitFullscreenElement;
