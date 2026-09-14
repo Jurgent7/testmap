@@ -554,6 +554,65 @@
     `);
   });
 
+  // Local services (shop, tourist info, lodging/restaurants)
+  const services = [
+    {
+      name: "Local Store",
+      coords: [42.44209812518333, 19.883694495719045],
+      type: "shop",
+      desc: "Small local shop for supplies and snacks."
+    },
+    {
+      name: "Tourist Information Point",
+      coords: [42.44185369097775, 19.88335469201345],
+      type: "info",
+      desc: "Park/visitor information point for the Valbona area."
+    },
+    {
+      name: "Hotel and Restaurant Amza Valbona Mountain Retreat",
+      coords: [42.44164447103541, 19.882401443633594],
+      type: "lodging",
+      desc: "Hotel and restaurant offering rooms and meals in Valbona."
+    },
+    {
+      name: "Guesthouse and Restaurant",
+      coords: [42.43104608109564, 19.872097958465186],
+      type: "lodging",
+      desc: "Guesthouse and restaurant along the valley."
+    }
+  ];
+
+  const serviceStyles = {
+    shop:    { color: "#dd6b20", emoji: "🛒" },
+    info:    { color: "#3182ce", emoji: "ℹ️" },
+    lodging: { color: "#805ad5", emoji: "🏨" }
+  };
+
+  function serviceIcon(type) {
+    const s = serviceStyles[type] || { color: "#555", emoji: "📍" };
+    return L.divIcon({
+      className: "",
+      html: `<div style="
+        width:34px; height:34px; display:flex; align-items:center; justify-content:center;">
+        <div style="
+          background:${s.color}; color:#fff; width:24px; height:24px; border-radius:6px;
+          display:flex; align-items:center; justify-content:center;
+          font-size:13px; border:2px solid #fff;
+          box-shadow:0 1px 4px rgba(0,0,0,0.5);">${s.emoji}</div>
+      </div>`,
+      iconSize: [34, 34],
+      iconAnchor: [17, 17]
+    });
+  }
+
+  services.forEach(s => {
+    const marker = L.marker(s.coords, { icon: serviceIcon(s.type) }).addTo(map);
+    marker.bindPopup(`
+      <div class="popup-title">${s.name}</div>
+      <div class="popup-desc">${s.desc}</div>
+    `);
+  });
+
   // Custom track-toggle control (checkboxes)
   // ---- GPX export ----
   function xmlEscape(s) {
@@ -1030,6 +1089,15 @@
         <div><span class="dot" style="background:${wpColors.village}"></span>Village</div>
         <div><span class="dot" style="background:${wpColors.rest}"></span>Rest stop / junction</div>
         <div><span class="dot" style="background:${wpColors.summit}"></span>Mountain pass</div>
+        <div style="margin-top:8px;">
+          <span style="display:inline-flex;align-items:center;justify-content:center;background:${serviceStyles.shop.color};color:#fff;width:16px;height:16px;border-radius:4px;font-size:9px;margin-right:6px;">${serviceStyles.shop.emoji}</span>Shop
+        </div>
+        <div style="margin-top:2px;">
+          <span style="display:inline-flex;align-items:center;justify-content:center;background:${serviceStyles.info.color};color:#fff;width:16px;height:16px;border-radius:4px;font-size:9px;margin-right:6px;">${serviceStyles.info.emoji}</span>Tourist info
+        </div>
+        <div style="margin-top:2px;">
+          <span style="display:inline-flex;align-items:center;justify-content:center;background:${serviceStyles.lodging.color};color:#fff;width:16px;height:16px;border-radius:4px;font-size:9px;margin-right:6px;">${serviceStyles.lodging.emoji}</span>Hotel / guesthouse
+        </div>
         <div style="margin-top:8px;">
           <span style="display:inline-flex;align-items:center;justify-content:center;background:#2f855a;color:#fff;width:16px;height:16px;border-radius:50%;font-size:9px;font-weight:700;margin-right:6px;">S</span>Trail start
         </div>
